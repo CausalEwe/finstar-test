@@ -1,4 +1,4 @@
-﻿namespace EmptyDAL;
+﻿namespace EmptyDAL.Entities;
 
 public interface IEntityBase
 {

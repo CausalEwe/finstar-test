@@ -1,9 +1,8 @@
-﻿namespace EmptyDAL.Interfaces;
+﻿namespace EmptyBusiness.Services;
 
-using Abstract;
-using EmptyBusiness.Extensions;
-using EmptyBusiness.Models;
-using Entities;
+using EmptyDAL.Abstract;
+using Extensions;
+using Models;
 
 public interface IStrangeItemManager
 {
