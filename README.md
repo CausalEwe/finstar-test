@@ -14,3 +14,15 @@
 1. Id int primary key identity(1, 1), 
 2. Code int, 
 3. Value varchar(500)
+
+
+Установка:
+1. Убедиться что установлена версия node не ниже v16.20.1
+2. Открыть cmd из папки ClientApp, написать npm i
+3. Сбилдить проект, запустить
+
+Возможные проблемы
+1. Если возникает ошибка DeprecationWarning: 'onAfterSetupMiddleware при старте приложения, нужно выполнить инструкцию из ответа Anton: https://stackoverflow.com/questions/70469717/cant-load-a-react-app-after-starting-server. Готовый файл можно скачать по ссылке: https://dropmefiles.com/bIWKZ. Заменить по пути \EmptyUI\ClientApp\node_modules\react-scripts\config.
+2. Если возникает проблема с resolve-url-loader, то самый простой способ решения удалить файл EmptyUI\ClientApp\src\shared\ui Search.sass. В принципе стили только делают правильное расположение иконки и добавляет паддинги. https://github.com/sass/node-sass/issues/2756
+
+Я честно пытался решить эти две проблемы в течении нескольких часов, но не хватило сил и времени :(
