@@ -16,6 +16,24 @@ Code int,
 )
 end
 
+-- Наполнение данными
+
+INSERT INTO [StrangeDb].[dbo].[StrangeItems] (Code, [Value])
+VALUES
+    (1, 'v1'),
+    (2, 'v11'),
+    (3, 'v21'),
+    (4, 'v16'),
+    (5, 'vsd123');
+
+-- Добавление ещё тестовых данных
+INSERT INTO [StrangeDb].[dbo].[StrangeItems] (Code, [Value])
+VALUES
+    (6, 'test'),
+    (7, 'helpme'),
+    (8, 'moretest'),
+    (9, 'aboba');
+
 -- Тестовое задание 2 --
 
 -- Создание таблицы [StrangeDb].[dbo].[test2Clients]
