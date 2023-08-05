@@ -10,7 +10,7 @@
 База данных StrangeDb
 Основная таблица StrangeItems
 
-Состоит из полей
-Id int primary key identity(1, 1), 
-Code int, 
-Value varchar(500)
+Состоит из полей:
+1. Id int primary key identity(1, 1), 
+2. Code int, 
+3. Value varchar(500)
