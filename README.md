@@ -24,6 +24,6 @@
 
 Возможные проблемы
 1. Если возникает ошибка DeprecationWarning: 'onAfterSetupMiddleware при старте приложения, нужно выполнить инструкцию из ответа Anton: https://stackoverflow.com/questions/70469717/cant-load-a-react-app-after-starting-server. Готовый файл можно скачать по ссылке: https://dropmefiles.com/bIWKZ. Заменить по пути \EmptyUI\ClientApp\node_modules\react-scripts\config.
-2. Если возникает проблема с resolve-url-loader, то самый простой способ решения удалить файл EmptyUI\ClientApp\src\shared\ui Search.sass и убрать его из импорта в Search.tsx. В принципе стили только делают правильное расположение иконки и добавляет паддинги. https://github.com/sass/node-sass/issues/2756
+2. Если возникает проблема с resolve-url-loader, то самый простой способ решения удалить файл EmptyUI\ClientApp\src\shared\ui Search.sass и убрать его из импорта в Search.tsx. В принципе стили только делают правильное расположение иконки и добавляют паддинги. https://github.com/sass/node-sass/issues/2756
 
 Я честно пытался решить эти две проблемы в течении нескольких часов, но не хватило сил и времени :(
