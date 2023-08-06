@@ -1,66 +1,98 @@
-import {StrangeItemsTable} from "./components/StrangeItemsTable";
-import {Search} from "../../shared/ui/Search";
-import {useEffect, useState} from "react";
-import {type StrangeItemViewModel} from "./strangeItem.models";
-import {StrangeItemApi} from "./strangeItem.api";
-import {Container, Row} from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
+import { Search } from "../../shared/ui/Search";
+import { useEffect, useState } from "react";
+import { type StrangeItemViewModel } from "./strangeItem.models";
+import { StrangeItemApi } from "./strangeItem.api";
+import { StrangeItemsTable } from "./components/StrangeItemsTable";
 
 export const StrangeItem = () => {
-    const [loading, setLoading] = useState(false);
 
+    const [loading, setLoading] = useState(false);
     const [items, setItems] = useState<Array<StrangeItemViewModel>>([]);
+    const [totalItems, setTotalItems] = useState(0);
+    const [page, setPage] = useState(0);
+    const [searchCode, setSearchCode] = useState("");
+    const [searchValue, setSearchValue] = useState("");
+    const [searchId, setSearchId] = useState("");
+    const rowsPerPage = 10;
 
     useEffect(() => {
 
-        setLoading(true);
+        fetchData();
 
-        StrangeItemApi.getByFilter({}).then(response => {
-            setItems(response.data)
-        }).finally(() => setLoading(false));
+        if (totalItems === 0) {
+            getCount();
+        }
 
-    }, [])
+    }, [page]);
 
-    const onChangeSearchByCode = (query: string) => {
+    useEffect(() => {
 
-        setLoading(true);
+        onChangeSearch();
 
-        StrangeItemApi.getByFilter({ findCode: Number(query) }).then(response => {
-            setItems(response.data)
-        }).finally(() => setLoading(false));
+    }, [searchCode, searchValue, searchId]);
 
-    }
-
-    const onChangeSearchByValue = (query: string) => {
+    const fetchData = () => {
 
         setLoading(true);
 
-        StrangeItemApi.getByFilter({ findValue: query }).then(response => {
-            setItems(response.data)
+        const findCode = searchCode.trim() !== "" ? Number(searchCode) : undefined;
+        const findValue = searchValue.trim() !== "" ? searchValue : undefined;
+        const findId = searchId.trim() !== "" ? Number(searchId) : undefined;
+
+        getCount();
+
+        StrangeItemApi.getByFilter({ from: page * rowsPerPage, count: rowsPerPage, findCode, findValue, findId }).then((response) => {
+            setItems(response.data);
         }).finally(() => setLoading(false));
 
-    }
+    };
 
-    const onChangeSearchById = (query: string) => {
+    const getCount = () => {
+
+        const findCode = searchCode.trim() !== "" ? Number(searchCode) : undefined;
+        const findValue = searchValue.trim() !== "" ? searchValue : undefined;
+        const findId = searchId.trim() !== "" ? Number(searchId) : undefined;
+
+        StrangeItemApi.getCount({ findCode, findValue, findId }).then((response) => {
+            setTotalItems(response.data);
+        });
+
+    };
+
+    const onChangeSearch = () => {
 
         setLoading(true);
 
-        StrangeItemApi.getById({ id: Number(query) }).then(response => {
-            setItems([response.data])
-        }).finally(() => setLoading(false));
+        setPage(0);
 
-    }
+        fetchData();
+
+    };
 
     return (
         <>
             <Container>
                 <Row>
-                    <Search placeholder={'Поиск по коду'} onChange={onChangeSearchByCode}/>
-                    <Search placeholder={'Поиск по значению'} onChange={onChangeSearchByValue}/>
-                    <Search placeholder={'Поиск по идентификатору'} onChange={onChangeSearchById}/>
+                    <Search placeholder={"Поиск по коду"} value={searchCode} onChange={(query) => setSearchCode(query)} />
+                    <Search placeholder={"Поиск по значению"} value={searchValue} onChange={(query) => setSearchValue(query)} />
+                    <Search placeholder={"Поиск по идентификатору"} onChange={(query) => setSearchId(query)} />
                 </Row>
             </Container>
             <Container className="mt-2">
-                { loading ? <div>Loading...</div> : <StrangeItemsTable items={ items }/> }
+                {loading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <>
+                        <StrangeItemsTable
+                            items={items}
+                            totalItems={totalItems}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(newPage) => setPage(newPage)}
+                        />
+                    </>
+                )}
             </Container>
         </>
     );

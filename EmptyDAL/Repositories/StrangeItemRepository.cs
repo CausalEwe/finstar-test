@@ -22,14 +22,7 @@ public class StrangeItemRepository : IStrangeItemRepository
         await this.context.SaveChangesAsync(cancellationToken);
     }
 
-    public void RemoveAllAsync()
-    {
-        //todo: context.StrangeItems.ExecuteSqlCommand("TRUNCATE TABLE [StrangeItems]");
-
-        this.context.StrangeItems.RemoveRange(this.context.StrangeItems);
-    }
-
-    public async Task<IReadOnlyCollection<StrangeItem>> GetByFilterAsync(int from, int count, int findCode, string findValue,
+    public async Task<int> GetCountAsync(int findCode, string findValue, int findId,
         CancellationToken cancellationToken = default)
     {
         IQueryable<StrangeItem> strangeItems = this.context.StrangeItems;
@@ -44,14 +37,45 @@ public class StrangeItemRepository : IStrangeItemRepository
             strangeItems = strangeItems.Where(x => x.Value.Contains(findValue));
         }
 
+        if (findId != 0)
+        {
+            strangeItems = strangeItems.Where(x => x.Id == findId);
+        }
+
+        //todo: не было идей фильтрации, если позволяет БЛ желательно избавиться от contains
+
+        return await strangeItems.CountAsync(cancellationToken);
+    }
+
+    public void RemoveAllAsync()
+    {
+        //todo: context.StrangeItems.ExecuteSqlCommand("TRUNCATE TABLE [StrangeItems]");
+
+        this.context.StrangeItems.RemoveRange(this.context.StrangeItems);
+    }
+
+    public async Task<IReadOnlyCollection<StrangeItem>> GetByFilterAsync(int from, int count, int findCode, string findValue, int findId,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<StrangeItem> strangeItems = this.context.StrangeItems;
+
+        if (findCode != 0)
+        {
+            strangeItems = strangeItems.Where(x => x.Code == findCode);
+        }
+
+        if (!string.IsNullOrEmpty(findValue))
+        {
+            strangeItems = strangeItems.Where(x => x.Value.Contains(findValue));
+        }
+
+        if (findId != 0)
+        {
+            strangeItems = strangeItems.Where(x => x.Id == findId);
+        }
+
         //todo: не было идей фильтрации, если позволяет БЛ желательно избавиться от contains
 
         return await strangeItems.Skip(from).Take(count).ToListAsync(cancellationToken);
-    }
-
-    public async Task<StrangeItem> GetByIdAsync(int id,
-        CancellationToken cancellationToken = default)
-    {
-        return await this.context.StrangeItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 }

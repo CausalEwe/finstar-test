@@ -25,19 +25,17 @@ public class StrangeItemController : Controller
     public async Task<IReadOnlyCollection<StrangeItemViewModel>> GetByFilter([FromQuery] StrangeItemFilter filter,
         CancellationToken cancellationToken = default)
     {
-        var strangeItems = await this.strangeItemManager.GetAsync(filter.From, filter.Count, filter.FindCode, filter.FindValue, cancellationToken);
+        var strangeItems = await this.strangeItemManager.GetAsync(filter.From, filter.Count, filter.FindCode, filter.FindValue, filter.findId, cancellationToken);
 
         return strangeItems.Select(x => x.ToViewModel()).ToList();
     }
 
     [HttpGet]
-    [Route("GetById")]
-    public async Task<StrangeItemViewModel> GetById(int id,
+    [Route("GetCount")]
+    public async Task<int> GetCountAsync(int findCode = 0, string findValue = "", int findId = 0,
         CancellationToken cancellationToken = default)
     {
-        var strangeItem = await this.strangeItemManager.GetByIdAsync(id, cancellationToken);
-
-        return strangeItem?.ToViewModel();
+        return await this.strangeItemManager.GetCountAsync(findCode, findValue, findId, cancellationToken);
     }
 
     [HttpPost]

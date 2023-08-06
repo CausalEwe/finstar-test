@@ -9,6 +9,7 @@ export interface StrangeItemFilter {
     count?: number;
     findCode?: number;
     findValue?: string;
+    findId?: number;
 }
 
 export interface StrangeItemCreateModel {

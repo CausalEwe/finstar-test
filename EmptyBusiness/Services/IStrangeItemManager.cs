@@ -9,10 +9,10 @@ public interface IStrangeItemManager
     Task CreateAsync(IReadOnlyCollection<StrangeItemBusinessModel> strangeItems,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyCollection<StrangeItemBusinessModel>> GetAsync(int from, int count, int findCode, string findValue,
+    Task<IReadOnlyCollection<StrangeItemBusinessModel>> GetAsync(int from, int count, int findCode, string findValue, int findId,
         CancellationToken cancellationToken = default);
 
-    Task<StrangeItemBusinessModel> GetByIdAsync(int id,
+    Task<int> GetCountAsync(int findCode, string findValue, int findId,
         CancellationToken cancellationToken = default);
 }
 
@@ -35,19 +35,17 @@ public class StrangeItemManager : IStrangeItemManager
         await this.strangeItemRepository.CreateAsync(items, cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<StrangeItemBusinessModel>> GetAsync(int from, int count, int findCode, string findValue,
+    public async Task<IReadOnlyCollection<StrangeItemBusinessModel>> GetAsync(int from, int count, int findCode, string findValue, int findId,
         CancellationToken cancellationToken = default)
     {
-        var result = await this.strangeItemRepository.GetByFilterAsync(from, count, findCode, findValue, cancellationToken);
+        var result = await this.strangeItemRepository.GetByFilterAsync(from, count, findCode, findValue, findId, cancellationToken);
 
         return result.Select(x => x.ToBusinessModel()).ToList();
     }
 
-    public async Task<StrangeItemBusinessModel> GetByIdAsync(int id,
+    public async Task<int> GetCountAsync(int findCode, string findValue, int findId,
         CancellationToken cancellationToken = default)
     {
-        var item = await this.strangeItemRepository.GetByIdAsync(id, cancellationToken);
-
-        return item?.ToBusinessModel();
+        return await this.strangeItemRepository.GetCountAsync(findCode, findValue, findId, cancellationToken);
     }
 }

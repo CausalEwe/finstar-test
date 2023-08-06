@@ -5,7 +5,8 @@ import {type GenericAbortSignal} from "axios";
 const endpoints = {
     GET_BY_FILTER: "strangeItems/GetByFilter",
     GET_BY_ID: "strangeItems/GetById",
-    CREATE: "strangeItems/Create"
+    CREATE: "strangeItems/Create",
+    GET_COUNT: "strangeItems/GetCount"
 };
 
 export class StrangeItemApi {
@@ -17,7 +18,7 @@ export class StrangeItemApi {
         return httpClient.post<void>(endpoints.CREATE, data, { signal });
     };
 
-    static getById(params: { id: number }, signal?: GenericAbortSignal) {
-        return httpClient.get<StrangeItemViewModel>(endpoints.GET_BY_ID, { params, signal });
-    };
+    static getCount(params: { findCode?: number, findValue?: string, findId?: number }, signal?: GenericAbortSignal) {
+        return httpClient.get<number>(endpoints.GET_COUNT, {params, signal});
+    }
 }

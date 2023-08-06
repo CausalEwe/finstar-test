@@ -9,4 +9,6 @@ public class StrangeItemFilter
     public int FindCode { get; set; } = 0;
 
     public string FindValue { get; set; } = string.Empty;
+
+    public int findId { get; set; } = 0;
 }
